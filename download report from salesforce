@@ -1,0 +1,23 @@
+# import necessary packages
+from simple_salesforce import Salesforce
+import requests
+import base64
+import json
+
+# get access to SFDC
+sf = Salesforce(instance_url='XXXXXX', session_id='')
+sf = Salesforce(password ='XXXXXX',username='XXXXXX',security_token='XXXXXX')
+
+sid=sf.session_id
+
+response = requests.get("report_url?view=d&snip&export=1&enc=UTF-8&xf=csv",headers=sf.headers,cookies = {'sid' : sid})
+
+# write into csv without disclaimer
+with open('SFDC.csv', 'wb') as SFDC:
+    for chunk in response.iter_content(chunk_size=128):
+        if b'disclaimer_content' in chunk:
+            break
+        else:
+            SFDC.write(chunk)
+            print(chunk)
+SFDC.close()
