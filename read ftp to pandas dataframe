@@ -1,0 +1,29 @@
+# import necessary packages
+from ftplib import FTP
+import io
+import pandas as pd
+import numpy as np
+
+#login credentials
+ftp=FTP('host')
+ftp.login('username','password')
+
+# change directory 
+ftp.cwd('XXXXXX/XXXXXX')
+
+# list file names under directory
+ftp.retrlines('LIST')
+
+# define a function to write data into StringIO
+sio = io.StringIO()
+
+def handle_binary(more_data):
+    more_data=more_data.decode('utf-8')
+    sio.write(more_data)
+    
+ftp.retrbinary('RETR '+filename,callback=handle_binary)
+ftp.quit()
+
+sio.seek(0)
+
+pd.read_csv(sio)
