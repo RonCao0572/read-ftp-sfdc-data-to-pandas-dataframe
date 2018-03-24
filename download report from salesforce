@@ -3,6 +3,8 @@ from simple_salesforce import Salesforce
 import requests
 import base64
 import json
+import io
+import pandas as pd
 
 # get access to SFDC
 sf = Salesforce(instance_url='XXXXXX', session_id='')
@@ -21,3 +23,15 @@ with open('SFDC.csv', 'wb') as SFDC:
             SFDC.write(chunk)
             print(chunk)
 SFDC.close()
+
+# another way to use StringIO
+sio = io.StringIO()
+def handle_binary(more_data):
+    more_data=more_data.decode('utf-8')
+    sio.write(more_data)
+handle_binary(response.content)
+
+sio.seek(0)
+
+sfdc=pd.read_csv(sio)
+sfdc.to_csv('SFDC.csv')
