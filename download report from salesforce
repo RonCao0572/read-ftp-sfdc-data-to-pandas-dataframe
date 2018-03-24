@@ -34,4 +34,7 @@ handle_binary(response.content)
 sio.seek(0)
 
 sfdc=pd.read_csv(sio)
-sfdc.to_csv('SFDC.csv')
+# to remove disclaimer
+sfdc_no_disclaimer=sfdc.iloc[:-5,:]
+
+sfdc_no_disclaimer.to_csv('SFDC.csv')
