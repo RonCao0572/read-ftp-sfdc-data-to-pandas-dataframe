@@ -30,11 +30,8 @@ def handle_binary(more_data):
     more_data=more_data.decode('utf-8')
     sio.write(more_data)
 handle_binary(response.content)
-
 sio.seek(0)
-
 sfdc=pd.read_csv(sio)
 # to remove disclaimer
 sfdc_no_disclaimer=sfdc.iloc[:-5,:]
-
 sfdc_no_disclaimer.to_csv('SFDC.csv')
